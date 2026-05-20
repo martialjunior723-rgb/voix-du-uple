@@ -1,0 +1,55 @@
+{% extends 'problemes/base.html' %}
+{% block title %}{{ probleme.titre }} – Voix du Peuple{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="detail-container">
+
+    <a href="{% url 'accueil' %}" class="back-link">← Retour à la liste</a>
+
+    <div class="detail-card">
+      <div class="detail-header">
+        <div class="detail-meta">
+          <span class="detail-badge">{{ probleme.get_categorie_icon }} {{ probleme.get_categorie_display }}</span>
+          <span class="detail-badge">{{ probleme.get_statut_display }}</span>
+        </div>
+        <h1 class="detail-title">{{ probleme.titre }}</h1>
+        <p class="detail-author">
+          👤 {{ probleme.nom }}
+          {% if probleme.telephone %} &nbsp;·&nbsp; 📞 {{ probleme.telephone }}{% endif %}
+          {% if probleme.email %} &nbsp;·&nbsp; ✉️ {{ probleme.email }}{% endif %}
+          &nbsp;·&nbsp; {{ probleme.date_creation|date:"d F Y" }}
+        </p>
+      </div>
+
+      <div class="detail-body">
+
+        <div class="detail-section">
+          <h3>⚠️ Description du problème</h3>
+          <p class="detail-text">{{ probleme.description|linebreaks }}</p>
+        </div>
+
+        <div class="detail-section">
+          <h3>💡 Solution souhaitée</h3>
+          <div class="detail-solution-box">
+            <p class="detail-text">{{ probleme.solution_souhaitee|linebreaks }}</p>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>⏱️ Urgence / Condition préférée</h3>
+          <div class="detail-condition-box condition-{{ probleme.condition }}">
+            {% if probleme.condition == 'urgent' %}🔴
+            {% elif probleme.condition == 'court_terme' %}🟡
+            {% elif probleme.condition == 'long_terme' %}🟢
+            {% else %}🔵{% endif %}
+            {{ probleme.get_condition_display }}
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

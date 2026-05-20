@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Voix du Peuple{% endblock %}</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<nav>
+  <a href="{% url 'accueil' %}" class="nav-brand">
+    🗣️ <span>Voix</span>&nbsp;du Peuple
+  </a>
+  <div class="nav-links">
+    <a href="{% url 'accueil' %}">Tous les problèmes</a>
+    <a href="{% url 'soumettre' %}" class="btn-nav">+ Soumettre</a>
+  </div>
+</nav>
+
+{% if messages %}
+<div class="messages-container">
+  {% for message in messages %}
+    <div class="message {{ message.tags }}">
+      {% if message.tags == 'success' %}✅{% endif %}
+      {{ message }}
+    </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% block content %}{% endblock %}
+
+<footer>
+  <strong>Voix du Peuple</strong> — Une plateforme pour exprimer vos difficultés et proposer des solutions
+</footer>
+
+</body>
+</html>

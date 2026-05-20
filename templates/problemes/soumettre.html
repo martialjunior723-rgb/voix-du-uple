@@ -1,0 +1,71 @@
+{% extends 'problemes/base.html' %}
+{% block title %}Soumettre un problème – Voix du Peuple{% endblock %}
+
+{% block content %}
+<div class="form-page">
+  <div class="form-container">
+    <div class="form-header">
+      <h1>✍️ Soumettre un problème</h1>
+      <p>Décrivez votre situation librement. Exprimez vos difficultés, la solution que vous souhaitez, et dans quelles conditions vous souhaitez être aidé.</p>
+    </div>
+
+    <form method="POST" class="form-card">
+      {% csrf_token %}
+
+      <div class="form-section">
+        <div class="form-section-title">👤 Vos informations</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="{{ form.nom.id_for_label }}">{{ form.nom.label }}</label>
+            {{ form.nom }}
+            {% if form.nom.errors %}<p class="error-text">{{ form.nom.errors.0 }}</p>{% endif %}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.email.id_for_label }}">{{ form.email.label }} <span class="optional">(optionnel)</span></label>
+            {{ form.email }}
+            {% if form.email.errors %}<p class="error-text">{{ form.email.errors.0 }}</p>{% endif %}
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="{{ form.telephone.id_for_label }}">{{ form.telephone.label }} <span class="optional">(optionnel)</span></label>
+          {{ form.telephone }}
+          {% if form.telephone.errors %}<p class="error-text">{{ form.telephone.errors.0 }}</p>{% endif %}
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">⚠️ Votre problème</div>
+        <div class="form-group">
+          <label for="{{ form.titre.id_for_label }}">{{ form.titre.label }}</label>
+          {{ form.titre }}
+          {% if form.titre.errors %}<p class="error-text">{{ form.titre.errors.0 }}</p>{% endif %}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.categorie.id_for_label }}">{{ form.categorie.label }}</label>
+          {{ form.categorie }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+          {{ form.description }}
+          {% if form.description.errors %}<p class="error-text">{{ form.description.errors.0 }}</p>{% endif %}
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">💡 Solution & Conditions</div>
+        <div class="form-group">
+          <label for="{{ form.solution_souhaitee.id_for_label }}">{{ form.solution_souhaitee.label }}</label>
+          {{ form.solution_souhaitee }}
+          {% if form.solution_souhaitee.errors %}<p class="error-text">{{ form.solution_souhaitee.errors.0 }}</p>{% endif %}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.condition.id_for_label }}">{{ form.condition.label }}</label>
+          {{ form.condition }}
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit">🚀 Soumettre mon problème</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

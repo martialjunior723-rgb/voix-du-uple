@@ -1,0 +1,88 @@
+{% extends 'problemes/base.html' %}
+{% block title %}Voix du Peuple – Problèmes de la communauté{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-content">
+    <h1>Exprimez vos <em>difficultés</em>,<br>proposez des solutions</h1>
+    <p>Une plateforme pour partager vos problèmes du quotidien, dire quelles solutions vous souhaitez et dans quelles conditions vous souhaitez être aidé.</p>
+    <a href="{% url 'soumettre' %}" class="btn-primary">✍️ &nbsp;Soumettre mon problème</a>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat">
+    <span class="stat-number">{{ total }}</span>
+    <span class="stat-label">Problèmes soumis</span>
+  </div>
+  <div class="stat">
+    <span class="stat-number">{{ nouveaux }}</span>
+    <span class="stat-label">Nouveaux</span>
+  </div>
+  <div class="stat">
+    <span class="stat-number">{{ resolus }}</span>
+    <span class="stat-label">Résolus</span>
+  </div>
+</div>
+
+<div class="container main-section">
+
+  <form method="GET" class="filters-bar">
+    <input type="text" name="search" class="search-input" placeholder="🔍 Rechercher un problème..." value="{{ search }}">
+    <select name="categorie" class="filter-select">
+      <option value="">Toutes catégories</option>
+      {% for value, label in categories %}
+        <option value="{{ value }}" {% if categorie_active == value %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <select name="condition" class="filter-select">
+      <option value="">Toutes urgences</option>
+      <option value="urgent" {% if condition_active == 'urgent' %}selected{% endif %}>🔴 Urgent</option>
+      <option value="court_terme" {% if condition_active == 'court_terme' %}selected{% endif %}>🟡 Court terme</option>
+      <option value="long_terme" {% if condition_active == 'long_terme' %}selected{% endif %}>🟢 Long terme</option>
+      <option value="information" {% if condition_active == 'information' %}selected{% endif %}>🔵 Information</option>
+    </select>
+    <button type="submit" class="btn-filter">Filtrer</button>
+  </form>
+
+  {% if problemes %}
+    <div class="cards-grid">
+      {% for p in problemes %}
+        <a href="{% url 'detail' p.pk %}" class="card {{ p.get_condition_color }}">
+          <div class="card-header">
+            <span class="card-icon">{{ p.get_categorie_icon }}</span>
+            <span class="card-badge badge-{{ p.get_condition_color }}">
+              {% if p.condition == 'urgent' %}🔴 Urgent
+              {% elif p.condition == 'court_terme' %}🟡 Court terme
+              {% elif p.condition == 'long_terme' %}🟢 Long terme
+              {% else %}🔵 Info{% endif %}
+            </span>
+          </div>
+          <h3 class="card-title">{{ p.titre }}</h3>
+          <p class="card-desc">{{ p.description }}</p>
+          <div class="card-solution">
+            <strong>💡 Solution souhaitée : </strong>{{ p.solution_souhaitee }}
+          </div>
+          <div class="card-footer">
+            <span class="card-author">👤 {{ p.nom }}</span>
+            <span>{{ p.date_creation|date:"d M Y" }}</span>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <div class="icon">🌿</div>
+      <h3>Aucun problème trouvé</h3>
+      <p>
+        {% if search or categorie_active or condition_active %}
+          Essayez d'autres critères de recherche.
+        {% else %}
+          Soyez le premier à soumettre un problème !
+        {% endif %}
+      </p>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}
